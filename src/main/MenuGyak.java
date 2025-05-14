@@ -5,6 +5,13 @@
 package main;
 
 import java.awt.HeadlessException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
@@ -31,6 +38,11 @@ public class MenuGyak extends javax.swing.JFrame {
 
         jMenu1 = new javax.swing.JMenu();
         jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
+        jLabel2 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jCheckBox1 = new javax.swing.JCheckBox();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jLabel3 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         mnuPrgMentes = new javax.swing.JMenuItem();
@@ -43,18 +55,37 @@ public class MenuGyak extends javax.swing.JFrame {
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setLocation(new java.awt.Point(800, 400));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
                 formWindowClosing(evt);
             }
         });
 
+        jLabel2.setText("Név: ");
+
+        jCheckBox1.setText("hírlevél");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Szoftverfejlesztő/tesztelő", "Rendszergazda", "Grafikus" }));
+
+        jLabel3.setText("Szak: ");
+
         jMenu2.setText("Program");
 
         mnuPrgMentes.setText("Mentés...");
+        mnuPrgMentes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuPrgMentesActionPerformed(evt);
+            }
+        });
         jMenu2.add(mnuPrgMentes);
 
         mnuPrgBetoltes.setText("Betöltés...");
+        mnuPrgBetoltes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuPrgBetoltesActionPerformed(evt);
+            }
+        });
         jMenu2.add(mnuPrgBetoltes);
 
         mnuPrgKilepes.setText("Kilépés...");
@@ -73,11 +104,34 @@ public class MenuGyak extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addGap(33, 33, 33)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTextField2)))
+                    .addComponent(jCheckBox1))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCheckBox1)
+                .addContainerGap())
         );
 
         pack();
@@ -91,13 +145,64 @@ public class MenuGyak extends javax.swing.JFrame {
         kilepes();
     }//GEN-LAST:event_formWindowClosing
 
+    private void mnuPrgMentesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPrgMentesActionPerformed
+        JFileChooser jfc = new JFileChooser(System.getProperty("user.dir"));
+
+        int gomb = jfc.showSaveDialog(null);
+
+        if (gomb == JFileChooser.APPROVE_OPTION) {
+            File kivalasztottFajl = jfc.getSelectedFile();
+            String fajlElerese = kivalasztottFajl.getAbsolutePath();
+            Path path = Path.of(fajlElerese);
+            try {
+                Files.writeString(path, tartalom());
+            } catch (IOException ex) {
+                Logger.getLogger(MenuGyak.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        /*byte[] bytes = jTextField1.getText().getBytes();
+        try {
+            Files.write(path, bytes);
+        } catch (IOException ex) {
+            Logger.getLogger(MenuGyak.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+    }//GEN-LAST:event_mnuPrgMentesActionPerformed
+
+    private void mnuPrgBetoltesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuPrgBetoltesActionPerformed
+        JFileChooser jfc = new JFileChooser(System.getProperty("user.dir"));
+        int gomb = jfc.showOpenDialog(null);
+
+        if (gomb == JFileChooser.APPROVE_OPTION) {
+            File kivalasztottFajl = jfc.getSelectedFile();
+            String fajlElerese = kivalasztottFajl.getAbsolutePath();
+            Path path = Path.of(fajlElerese);
+            try {
+                Files.readString(kivalasztottFajl.toPath());
+                System.out.println("A beolvasott fájl tartalma: ");
+                System.out.println("sorok");
+            } catch (IOException ex) {
+                Logger.getLogger(MenuGyak.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }//GEN-LAST:event_mnuPrgBetoltesActionPerformed
+
+    public String tartalom() {
+        String txtFieldNev = jTextField2.getText();
+        Object szakNev = jComboBox1.getSelectedItem();
+        boolean hirlevel = jCheckBox1.isSelected();
+        String tartalom = "Név: " + txtFieldNev + "\nSzak: " + szakNev + "\nHírlevél: " + hirlevel;
+
+        return tartalom;
+    }
+
     private void kilepes() throws HeadlessException {
         int msgTip = JOptionPane.QUESTION_MESSAGE;
-        int gomb = JOptionPane.showConfirmDialog(null, "Biztosan kilépsz?","Kilépés",JOptionPane.YES_NO_OPTION,msgTip);
+        int gomb = JOptionPane.showConfirmDialog(null, "Biztosan kilépsz?", "Kilépés", JOptionPane.YES_NO_OPTION, msgTip);
         if (gomb == JOptionPane.YES_OPTION) {
             System.exit(0);
-        }else if(gomb == JOptionPane.NO_OPTION){
-            
+        } else if (gomb == JOptionPane.NO_OPTION) {
+
         }
     }
 
@@ -137,10 +242,15 @@ public class MenuGyak extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JMenuItem mnuPrgBetoltes;
     private javax.swing.JMenuItem mnuPrgKilepes;
     private javax.swing.JMenuItem mnuPrgMentes;
